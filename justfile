@@ -9,15 +9,16 @@ install-deps:
 
 # Build and watch.
 build-dev: install-deps
-    npx vite
+    npx vite --force
 
 # Type-check, compile and minify for production.
 build-prod: install-deps
-    npx run-p type-check \"build-only {@}\" --
+    npx run-p type-check "build-only {@}" --
 
 # Build only.
 build: install-deps
     npx vite build
+
 
 # Run unit tests.
 test-unit:
@@ -26,6 +27,7 @@ test-unit:
 # Run the TypeScript compiler.
 type-check:
     npx vue-tsc --build --force
+
 
 # Check lint issues.
 lint:

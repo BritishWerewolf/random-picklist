@@ -3,10 +3,9 @@
     <select name="list" id="list" v-model="chosenList">
         <option v-for="list in listsStore.lists" :value="list">{{ list.name }}</option>
     </select>
+    <h2>{{ chosenList.name }}</h2>
     <button @click="pickRandomItem">Pick an item!</button>
-    {{ chosenItem }}
-    <br>
-    <pre>{{ chosenList }}</pre>
+    <p class="text-3xl text-red-600">{{ chosenItem.name }}</p>
 </template>
 
 <script setup lang="ts">
@@ -21,7 +20,7 @@ if (listsStore.lists.length === 0) {
     listsStore.addItem(listsStore.lists[0].id, { id: 1, name: 'First', weight: 1 });
     listsStore.addItem(listsStore.lists[0].id, { id: 2, name: 'Second', weight: 1 });
     listsStore.addItem(listsStore.lists[0].id, { id: 3, name: 'Third', weight: 1 });
-    listsStore.addItem(listsStore.lists[0].id, { id: 4, name: 'Fourth', weight: -1 });
+    listsStore.addItem(listsStore.lists[0].id, { id: 4, name: 'Fourth', weight: 1 });
     listsStore.addItem(listsStore.lists[0].id, { id: 5, name: 'Fifth', weight: 1 });
 
     listsStore.createList('Alphabet');
