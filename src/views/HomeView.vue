@@ -5,6 +5,8 @@
     </select>
     <button @click="pickRandomItem">Pick an item!</button>
     {{ chosenItem }}
+    <br>
+    <pre>{{ chosenList }}</pre>
 </template>
 
 <script setup lang="ts">
@@ -16,30 +18,46 @@ const listsStore = useListsStore();
 // Mock the database.
 if (listsStore.lists.length === 0) {
     listsStore.createList('Numbers');
-    listsStore.addItem(listsStore.lists[0].id, { id: 1, name: 'First' });
-    listsStore.addItem(listsStore.lists[0].id, { id: 2, name: 'Second' });
-    listsStore.addItem(listsStore.lists[0].id, { id: 3, name: 'Third' });
-    listsStore.addItem(listsStore.lists[0].id, { id: 4, name: 'Fourth' });
-    listsStore.addItem(listsStore.lists[0].id, { id: 5, name: 'Fifth' });
+    listsStore.addItem(listsStore.lists[0].id, { id: 1, name: 'First', weight: 1 });
+    listsStore.addItem(listsStore.lists[0].id, { id: 2, name: 'Second', weight: 1 });
+    listsStore.addItem(listsStore.lists[0].id, { id: 3, name: 'Third', weight: 1 });
+    listsStore.addItem(listsStore.lists[0].id, { id: 4, name: 'Fourth', weight: -1 });
+    listsStore.addItem(listsStore.lists[0].id, { id: 5, name: 'Fifth', weight: 1 });
 
     listsStore.createList('Alphabet');
-    listsStore.addItem(listsStore.lists[1].id, { id: 6, name: 'Alpha' });
-    listsStore.addItem(listsStore.lists[1].id, { id: 7, name: 'Beta' });
-    listsStore.addItem(listsStore.lists[1].id, { id: 8, name: 'Charlie' });
-    listsStore.addItem(listsStore.lists[1].id, { id: 9, name: 'Delta' });
-    listsStore.addItem(listsStore.lists[1].id, { id: 10, name: 'Echo' });
+    listsStore.addItem(listsStore.lists[1].id, { id: 6, name: 'Alpha', weight: 1 });
+    listsStore.addItem(listsStore.lists[1].id, { id: 7, name: 'Beta', weight: 1 });
+    listsStore.addItem(listsStore.lists[1].id, { id: 8, name: 'Charlie', weight: 1 });
+    listsStore.addItem(listsStore.lists[1].id, { id: 9, name: 'Delta', weight: 1 });
+    listsStore.addItem(listsStore.lists[1].id, { id: 10, name: 'Echo', weight: 1 });
 }
 
 let chosenList = ref<List>({ id: 0, name: '', items: [] });
-let chosenItem = ref<Item>({ id: 0, name: '' });
+let chosenItem = ref<Item>({ id: 0, name: '', weight: 1 });
 
 onMounted(() => {
     chosenList.value = listsStore.lists[0];
 });
 
 function pickRandomItem() {
-    let items = chosenList.value.items;
-    const randomIndex = Math.floor(Math.random() * items.length);
+    // Increment all weights by 1.
+    const items = chosenList.value.items
+    .map(item => ({ ...item, weight: item.weight++ }));
+
+    // Calculate cumulative weights.
+    const cumulativeWeights: Array<number> = [];
+    let cumulativeWeight = 0;
+    items.forEach(item => {
+        cumulativeWeight += item.weight;
+        cumulativeWeights.push(cumulativeWeight);
+    });
+
+    // Generate a random index and store that item.
+    const randomWeight = Math.random() * cumulativeWeight;
+    const randomIndex = cumulativeWeights.findIndex(weight => weight >= randomWeight);
     chosenItem.value = items[randomIndex];
+
+    // Reset the weight of the selected item to 1.
+    chosenList.value.items[randomIndex].weight = 1;
 }
 </script>

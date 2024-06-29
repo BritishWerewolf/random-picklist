@@ -7,4 +7,5 @@ type List = {
 type Item = {
     id: number;
     name: string;
+    weight: number;
 };
