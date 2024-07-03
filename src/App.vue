@@ -1,11 +1,10 @@
 <template>
     <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
     </nav>
 
     <div>
-        <RouterView />
+        <RouterView :key="$route.fullPath" />
     </div>
 </template>
 

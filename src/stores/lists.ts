@@ -1,8 +1,21 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 export const useListsStore = defineStore('lists', () => {
+    /** State */
     const lists = ref<Array<List>>([]);
+
+    /** Getters */
+    const listNames = computed(() => lists.value.map(list => list.name));
+
+    /** Actions */
+    function totalWeight(listName: string) {
+        return lists.value
+        .filter(list => list.name === listName)
+        .reduce((acc, list) => {
+            return acc + list.items.reduce((acc, item) => acc + item.weight, 0)
+        }, 0)
+    };
 
     function createList(name: string): List {
         const list: List = {
@@ -33,9 +46,17 @@ export const useListsStore = defineStore('lists', () => {
     }
 
     return {
+        /** State */
         lists,
+
+        /** Getters */
+        totalWeight,
+
+        /** Actions */
         createList,
         addItem,
         removeItem,
     };
+}, {
+    persist: true,
 });
