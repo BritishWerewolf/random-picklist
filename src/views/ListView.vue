@@ -4,6 +4,11 @@
         <h2>{{ $route.params.name }}</h2>
         <button @click="pickRandomItem">Pick an item!</button>
         <p class="text-3xl text-red-600">{{ chosenItem.name }}</p>
+
+        <div>
+            <h3>Weights</h3>
+            <p v-for="item in chosenList.items" :key="item.name">{{ item.name }}: {{ item.weight }}</p>
+        </div>
     </div>
 </template>
 
