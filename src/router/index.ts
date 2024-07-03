@@ -25,7 +25,7 @@ const router = createRouter({
         if (listsStore.lists.map(list => list.name).includes(name)) {
           next();
         } else {
-          next({ name: 'home' })
+          next({ name: 'home' });
         }
       }
     },

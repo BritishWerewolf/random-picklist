@@ -9,13 +9,14 @@ export const useListsStore = defineStore('lists', () => {
     const listNames = computed(() => lists.value.map(list => list.name));
 
     /** Actions */
-    function totalWeight(listName: string) {
-        return lists.value
-        .filter(list => list.name === listName)
-        .reduce((acc, list) => {
-            return acc + list.items.reduce((acc, item) => acc + item.weight, 0)
-        }, 0)
-    };
+    function addItem(listId: number, item: Item) {
+        lists.value = lists.value.map(list => {
+            if (list.id === listId) {
+                list.items.push(item);
+            }
+            return list;
+        });
+    }
 
     function createList(name: string): List {
         const list: List = {
@@ -27,15 +28,6 @@ export const useListsStore = defineStore('lists', () => {
         return list;
     }
 
-    function addItem(listId: number, item: Item) {
-        lists.value = lists.value.map(list => {
-            if (list.id === listId) {
-                list.items.push(item);
-            }
-            return list;
-        });
-    }
-
     function removeItem(listId: number, itemId: number) {
         lists.value = lists.value.map(list => {
             if (list.id === listId) {
@@ -45,17 +37,26 @@ export const useListsStore = defineStore('lists', () => {
         });
     }
 
+    function totalWeight(listName: string) {
+        return lists.value
+        .filter(list => list.name === listName)
+        .reduce((acc, list) => {
+            return acc + list.items.reduce((acc, item) => acc + item.weight, 0);
+        }, 0);
+    }
+
     return {
         /** State */
         lists,
 
         /** Getters */
-        totalWeight,
+        listNames,
 
         /** Actions */
-        createList,
         addItem,
+        createList,
         removeItem,
+        totalWeight,
     };
 }, {
     persist: true,
