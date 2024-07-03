@@ -1,6 +1,11 @@
 <template>
     <nav>
         <RouterLink to="/">Home</RouterLink>
+        <RouterLink
+            v-for="list in listsStore.lists"
+            :to="`/list/${list.name}`"
+            :key="`/list/${list.name}`"
+        >{{ list.name }}</RouterLink>
     </nav>
 
     <div>
@@ -10,6 +15,9 @@
 
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
+import { useListsStore } from '@/stores/lists';
+
+const listsStore = useListsStore();
 </script>
 
 <style>

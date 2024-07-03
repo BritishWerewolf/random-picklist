@@ -1,7 +1,4 @@
 <template>
-    <div class="w-52">
-        <RouterLink v-for="list in listsStore.lists" :to="`/list/${list.name}`">{{ list.name }}</RouterLink>
-    </div>
     <div>
         <h1>Random picker</h1>
         <h2>{{ $route.params.name }}</h2>
