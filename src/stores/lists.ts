@@ -19,6 +19,7 @@ export const useListsStore = defineStore('lists', () => {
     }
 
     function createList(name: string): List {
+        // Create a variable so that we can return it after pushing.
         const list: List = {
             id: lists.value.length + 1,
             name,
