@@ -1,9 +1,10 @@
 <template>
     <nav>
-        <RouterLink to="/">Home</RouterLink>
+        <RouterLink :to="{ name: 'home' }">Home</RouterLink>
+        <RouterLink :to="{ name: 'create' }">Create list</RouterLink>
         <RouterLink
             v-for="list in listsStore.lists"
-            :to="`/list/${list.name}`"
+            :to="{ name: 'list', params: { name: list.name } }"
             :key="`/list/${list.name}`"
         >{{ list.name }}</RouterLink>
     </nav>
