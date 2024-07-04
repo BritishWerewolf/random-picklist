@@ -1,3 +1,10 @@
+/// Errors
+type AppError = {
+    key: string;
+    message: string;
+}
+
+/// App types
 type Item = {
     id: number;
     name: string;

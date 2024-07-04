@@ -8,6 +8,8 @@
     "playwright.config.*"
   ],
   "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["ES2015"],
     "composite": true,
     "noEmit": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
