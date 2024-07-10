@@ -28,6 +28,7 @@ nav {
     left: 0;
     right: 0;
     background-color: aquamarine;
+    color: black;
     height: 50px;
 }
 
