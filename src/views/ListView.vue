@@ -19,6 +19,14 @@
             </div>
 
             <button @click="addItem" class="p-2 my-3 text-black bg-red-600 rounded">Add item!</button>
+
+            <div>
+                <button @click="saveEdits">Save</button>
+                <div v-for="item in chosenList.items" :key="item.id">
+                    <input type="text" v-model="item.name">
+                    <input type="number" v-model="item.weight">
+                </div>
+            </div>
         </div>
         <div v-else>
             <button @click="pickRandomItem" class="p-2 my-3 text-black bg-red-600 rounded">Pick an item!</button>
@@ -34,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, toRaw, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useListsStore } from '@/stores/lists';
 
@@ -42,11 +50,27 @@ const listsStore = useListsStore();
 const route = useRoute();
 // Force `as List` because we are checking if the list exists _before_ this page
 // can load.
-const list: List = listsStore.lists.find(list => list.name === route.params.name) as List;
+const chosenList: List = listsStore.lists.filter(list => list.name === route.params.name)[0];
+let chosenItem = ref<Item>({ id: 0, name: '', weight: 1 });
+let originalItems: Array<Item> = structuredClone(toRaw(chosenList.items));
 
 let editMode = ref(false);
 function toggleEdit() {
     editMode.value = !editMode.value;
+
+    // Weren't editing, now we are, so save the previous items.
+    if (editMode.value) {
+        originalItems = structuredClone(toRaw(chosenList.items));
+    } else {
+        cancelEdits();
+    }
+}
+function saveEdits() {
+    editMode.value = false;
+}
+function cancelEdits() {
+    chosenList.items = structuredClone(originalItems);
+    editMode.value = false;
 }
 
 const emptyItem = {
@@ -84,16 +108,13 @@ function addItem() {
         return;
     }
 
-    listsStore.addItem(list.id, newItem.value);
+    listsStore.addItem(chosenList.id, newItem.value);
     newItem.value = emptyItem;
 }
 
-let chosenItem = ref<Item>({ id: 0, name: '', weight: 1 });
-let chosenList = ref<List>(listsStore.lists.filter(list => list.name === route.params.name)[0]);
-
 function pickRandomItem() {
     // Increment all weights by 1.
-    const items = chosenList.value.items
+    const items = chosenList.items
     .map(item => ({ ...item, weight: item.weight++ }));
 
     // Calculate cumulative weights.
@@ -110,7 +131,7 @@ function pickRandomItem() {
     chosenItem.value = items[randomIndex];
 
     // Reset the weight of the selected item to 1.
-    chosenList.value.items[randomIndex].weight = 1;
+    chosenList.items[randomIndex].weight = 1;
 }
 
 let errors = ref<Array<AppError>>([]);
