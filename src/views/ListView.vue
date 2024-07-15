@@ -22,7 +22,7 @@
 
             <div>
                 <button @click="saveEdits">Save</button>
-                <div v-for="item in chosenList.items" :key="item.id">
+                <div v-for="item in newItems" :key="item.id">
                     <input type="text" v-model="item.name">
                     <input type="number" v-model="item.weight">
                 </div>
@@ -52,7 +52,7 @@ const route = useRoute();
 // can load.
 const chosenList: List = listsStore.lists.filter(list => list.name === route.params.name)[0];
 let chosenItem = ref<Item>({ id: 0, name: '', weight: 1 });
-let originalItems: Array<Item> = structuredClone(toRaw(chosenList.items));
+let newItems = ref<Array<Item>>([]);
 
 let editMode = ref(false);
 function toggleEdit() {
@@ -60,16 +60,16 @@ function toggleEdit() {
 
     // Weren't editing, now we are, so save the previous items.
     if (editMode.value) {
-        originalItems = structuredClone(toRaw(chosenList.items));
+        newItems.value = structuredClone(toRaw(chosenList.items));
     } else {
         cancelEdits();
     }
 }
 function saveEdits() {
     editMode.value = false;
+    chosenList.items = newItems.value;
 }
 function cancelEdits() {
-    chosenList.items = structuredClone(originalItems);
     editMode.value = false;
 }
 
