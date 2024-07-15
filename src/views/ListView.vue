@@ -3,6 +3,14 @@
         <h1 class="text-3xl">Random picker</h1>
         <h2 class="text-2xl">{{ $route.params.name }} <span @click="toggleEdit">{{ editMode ? '[Cancel]' : '[Edit]' }}</span></h2>
 
+        <DonutChart
+            index="name"
+            category="weight"
+            type="pie"
+            :data="chosenList.items"
+            :colors="['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple']"
+        />
+
         <div v-if="editMode">
             <h3 class="text-xl">Add an item</h3>
             <p v-if="hasError('general')" class="error">{{ getError('general').message }}</p>
@@ -45,6 +53,7 @@
 import { ref, toRaw, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useListsStore } from '@/stores/lists';
+import { DonutChart } from '@/components/ui/chart-donut';
 
 const listsStore = useListsStore();
 const route = useRoute();
