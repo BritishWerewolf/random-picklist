@@ -11,7 +11,13 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest'
   },
+  ignorePatterns: [
+    // Shadcn components shouldn't be checked.
+    'src/components/ui/*',
+  ],
   rules: {
+    "vue/multi-word-component-names": "off",
+
     "curly": "error",
     "eqeqeq": "error",
     "func-name-matching": "error",
@@ -25,7 +31,6 @@ module.exports = {
     "no-unreachable": "error",
     "no-unreachable-loop": "error",
     "no-unused-vars": "error",
-    "no-use-before-define": "error",
     "no-compare-neg-zero": "error",
     "no-var": "error",
     "sort-vars": ["error", { "ignoreCase": true }],

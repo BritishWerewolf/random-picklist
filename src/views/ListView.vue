@@ -88,7 +88,7 @@ const emptyItem = {
     weight: 1,
 };
 let newItem = ref<Item>(structuredClone(emptyItem));
-watch(newItem, _ => {
+watch(newItem, () => {
     errors.value = [];
 }, {
     deep: true,
