@@ -1,7 +1,7 @@
 <template>
     <div>
-        <h1 class="text-3xl">Random picker</h1>
-        <h2 class="text-2xl">{{ $route.params.name }} <span @click="toggleEdit">{{ editMode ? '[Cancel]' : '[Edit]' }}</span></h2>
+        <Heading-1>Random picker</Heading-1>
+        <Heading-2>{{ $route.params.name }} <span @click="toggleEdit">{{ editMode ? '[Cancel]' : '[Edit]' }}</span></Heading-2>
 
         <DonutChart
             index="name"
@@ -12,38 +12,51 @@
         />
 
         <div v-if="editMode">
-            <h3 class="text-xl">Add an item</h3>
+            <Heading-3>Add an item</Heading-3>
             <p v-if="hasError('general')" class="error">{{ getError('general').message }}</p>
 
             <div class="my-2">
-                <label>Name</label>
-                <input type="text" v-model="newItem.name">
+                <Label>Name</Label>
+                <Input type="text" v-model="newItem.name" />
                 <p v-if="hasError('name')" class="error">{{ getError('name').message }}</p>
             </div>
             <div class="my-2">
-                <label>Weight</label>
-                <input type="number" v-model="newItem.weight">
+                <Label>Weight</Label>
+                <Input type="number" v-model="newItem.weight" />
                 <p v-if="hasError('weight')" class="error">{{ getError('weight').message }}</p>
             </div>
 
-            <button @click="addItem" class="p-2 my-3 text-black bg-red-600 rounded">Add item!</button>
+            <Button @click="addItem">Add item!</Button>
 
-            <div>
-                <button @click="saveEdits">Save</button>
-                <div v-for="item in newItems" :key="item.id">
-                    <input type="text" v-model="item.name">
-                    <input type="number" v-model="item.weight">
-                </div>
+            <div class="mt-4">
+                <Button @click="saveEdits">Save</Button>
+
+                <Table>
+                    <template #thead?>
+                        <TableRow>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Weight</TableHead>
+                        </TableRow>
+                      </template>
+                      <TableRow v-for="item in newItems" :key="item.id">
+                          <TableData>
+                              <Input v-model="item.name" />
+                          </TableData>
+                          <TableData>
+                              <Input v-model="item.weight" type="number" />
+                          </TableData>
+                      </TableRow>
+                </Table>
             </div>
         </div>
         <div v-else>
-            <button @click="pickRandomItem" class="p-2 my-3 text-black bg-red-600 rounded">Pick an item!</button>
+            <Button @click="pickRandomItem">Pick an item!</Button>
 
             <p class="text-3xl text-red-600">{{ chosenItem.name }}</p>
         </div>
 
         <div class="mt-3">
-            <h3>Weights</h3>
+            <Heading-3>Weights</Heading-3>
             <p v-for="item in chosenList.items" :key="item.name">{{ item.name }}: {{ item.weight }}</p>
         </div>
     </div>
@@ -53,7 +66,13 @@
 import { ref, toRaw, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useListsStore } from '@/stores/lists';
+
+import { Button } from '@/components/ui/button';
 import { DonutChart } from '@/components/ui/chart-donut';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Heading1, Heading2, Heading3 } from '@/components/ui/typography';
+import { Table, TableRow, TableHead, TableData } from '@/components/ui/typography';
 
 const listsStore = useListsStore();
 const route = useRoute();

@@ -1,19 +1,24 @@
 <template>
-    <h1>Create a new list</h1>
+    <Heading-1 class="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">Create a new list</Heading-1>
     <form @submit.prevent="createList">
         <div>
-            <label for="name">Name</label>
-            <input type="text" name="name" id="name" v-model="name">
+            <Label for="name">Name</Label>
+            <Input v-model="name" id="name" name="name" placeholder="Name" />
             <p v-if="hasError('name')" class="error">{{ getError('name').message }}</p>
         </div>
 
-        <button type="submit">Create</button>
+        <Button>Create</Button>
     </form>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useListsStore } from '@/stores/lists';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Heading1 } from '@/components/ui/typography';
 
 const listsStore = useListsStore();
 

@@ -1,9 +1,11 @@
 <template>
-    <h1>Home</h1>
+    <Heading-1>Home</Heading-1>
 </template>
 
 <script setup lang="ts">
 import { useListsStore } from '@/stores/lists';
+
+import { Heading1 } from '@/components/ui/typography';
 
 const listsStore = useListsStore();
 
