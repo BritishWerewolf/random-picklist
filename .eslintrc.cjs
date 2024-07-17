@@ -3,13 +3,16 @@ require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
   root: true,
-  'extends': [
+  extends: [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
-    '@vue/eslint-config-typescript'
+    '@vue/eslint-config-typescript',
+  ],
+  plugins: [
+    '@stylistic/ts',
   ],
   parserOptions: {
-    ecmaVersion: 'latest'
+    ecmaVersion: 'latest',
   },
   ignorePatterns: [
     // Shadcn components shouldn't be checked.
@@ -17,6 +20,8 @@ module.exports = {
   ],
   rules: {
     "vue/multi-word-component-names": "off",
+
+    '@stylistic/ts/indent': ['error', 2],
 
     "curly": "error",
     "eqeqeq": "error",

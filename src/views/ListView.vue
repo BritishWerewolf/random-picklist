@@ -65,89 +65,89 @@ let newItems = ref<Array<Item>>([]);
 
 let editMode = ref(false);
 function toggleEdit() {
-    editMode.value = !editMode.value;
+  editMode.value = !editMode.value;
 
-    // Weren't editing, now we are, so save the previous items.
-    if (editMode.value) {
-        newItems.value = structuredClone(toRaw(chosenList.items));
-    } else {
-        cancelEdits();
-    }
+  // Weren't editing, now we are, so save the previous items.
+  if (editMode.value) {
+    newItems.value = structuredClone(toRaw(chosenList.items));
+  } else {
+    cancelEdits();
+  }
 }
 function saveEdits() {
-    editMode.value = false;
-    chosenList.items = newItems.value;
+  editMode.value = false;
+  chosenList.items = newItems.value;
 }
 function cancelEdits() {
-    editMode.value = false;
+  editMode.value = false;
 }
 
 const emptyItem = {
-    id: 0,
-    name: '',
-    weight: 1,
+  id: 0,
+  name: '',
+  weight: 1,
 };
 let newItem = ref<Item>(structuredClone(emptyItem));
 watch(newItem, () => {
-    errors.value = [];
+  errors.value = [];
 }, {
-    deep: true,
+  deep: true,
 });
 function addItem() {
-    if (newItem.value.id !== 0) {
-        errors.value.push({
-            key: 'general',
-            message: 'An ID cannot be provided.',
-        });
-    }
-    if (newItem.value.name === '') {
-        errors.value.push({
-            key: 'name',
-            message: 'Name is required.',
-        });
-    }
-    if (!Number.isInteger(newItem.value.weight)) {
-        errors.value.push({
-            key: 'weight',
-            message: 'Weight must be a number.',
-        });
-    }
+  if (newItem.value.id !== 0) {
+    errors.value.push({
+      key: 'general',
+      message: 'An ID cannot be provided.',
+    });
+  }
+  if (newItem.value.name === '') {
+    errors.value.push({
+      key: 'name',
+      message: 'Name is required.',
+    });
+  }
+  if (!Number.isInteger(newItem.value.weight)) {
+    errors.value.push({
+      key: 'weight',
+      message: 'Weight must be a number.',
+    });
+  }
 
-    if (errors.value.length > 0) {
-        return;
-    }
+  if (errors.value.length > 0) {
+    return;
+  }
 
-    listsStore.addItem(chosenList.id, newItem.value);
-    newItem.value = emptyItem;
+  listsStore.addItem(chosenList.id, newItem.value);
+  newItem.value = emptyItem;
 }
 
 function pickRandomItem() {
-    // Increment all weights by 1.
-    const items = chosenList.items
+  // Increment all weights by 1.
+  const items = chosenList.items
     .map(item => ({ ...item, weight: item.weight++ }));
 
-    // Calculate cumulative weights.
-    const cumulativeWeights: Array<number> = [];
-    let cumulativeWeight = 0;
-    items.forEach(item => {
-        cumulativeWeight += item.weight;
-        cumulativeWeights.push(cumulativeWeight);
-    });
+  // Calculate cumulative weights.
+  const cumulativeWeights: Array<number> = [];
+  let cumulativeWeight = 0;
+  items.forEach(item => {
+    cumulativeWeight += item.weight;
+    cumulativeWeights.push(cumulativeWeight);
+  });
 
-    // Generate a random index and store that item.
-    const randomWeight = Math.random() * cumulativeWeight;
-    const randomIndex = cumulativeWeights.findIndex(weight => weight >= randomWeight);
-    chosenItem.value = items[randomIndex];
+  // Generate a random index and store that item.
+  const randomWeight = Math.random() * cumulativeWeight;
+  const randomIndex = cumulativeWeights.findIndex(weight => weight >= randomWeight);
+  chosenItem.value = items[randomIndex];
 
-    // Reset the weight of the selected item to 1.
-    chosenList.items[randomIndex].weight = 1;
+  // Reset the weight of the selected item to 1.
+  chosenList.items[randomIndex].weight = 1;
 }
 
 let errors = ref<Array<AppError>>([]);
 function hasError(key: string) {
-    return errors.value.map(error => error.key).includes(key);
+  return errors.value.map(error => error.key).includes(key);
 }
 function getError(key: string) {
-    return errors.value.filter(error => error.key === key)[0];
+  return errors.value.filter(error => error.key === key)[0];
 }
 </script>

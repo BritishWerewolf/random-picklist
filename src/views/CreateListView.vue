@@ -20,21 +20,21 @@ const listsStore = useListsStore();
 let name = ref('');
 let list = ref<List>();
 function createList() {
-    if (listsStore.listNames.includes(name.value)) {
-        errors.value.push({
-            key: 'name',
-            message: 'A list with that name already exists.',
-        });
-        return;
-    }
-    list.value = listsStore.createList(name.value);
+  if (listsStore.listNames.includes(name.value)) {
+    errors.value.push({
+      key: 'name',
+      message: 'A list with that name already exists.',
+    });
+    return;
+  }
+  list.value = listsStore.createList(name.value);
 }
 
 let errors = ref<Array<AppError>>([]);
 function hasError(key: string) {
-    return errors.value.map(error => error.key).includes(key);
+  return errors.value.map(error => error.key).includes(key);
 }
 function getError(key: string) {
-    return errors.value.filter(error => error.key === key)[0];
+  return errors.value.filter(error => error.key === key)[0];
 }
 </script>

@@ -11,8 +11,8 @@ const data = [
 ];
 
 const valueFormatter = (tick: number | Date) => typeof tick === 'number'
-? `£${new Intl.NumberFormat('gb').format(tick).toString()}`
-: '';
+  ? `£${new Intl.NumberFormat('gb').format(tick).toString()}`
+  : '';
 </script>
 
 <template>
