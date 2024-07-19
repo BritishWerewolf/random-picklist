@@ -38,7 +38,7 @@
 
             <div class="flex-1">
                 <Table>
-                    <template #thead?>
+                    <template #thead>
                         <TableRow>
                             <TableHead>Name</TableHead>
                             <TableHead>Weight</TableHead>
