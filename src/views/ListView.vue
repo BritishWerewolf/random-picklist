@@ -7,7 +7,7 @@
             index="name"
             category="weight"
             type="pie"
-            :data="chosenList.items"
+            :data="editMode ? newItems : chosenList.items"
             :colors="['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple']"
         />
 
@@ -123,12 +123,11 @@ function cancelEdits() {
   editMode.value = false;
 }
 
-const emptyItem = {
+let newItem = ref<Item>({
   id: 0,
   name: '',
   weight: 1,
-};
-let newItem = ref<Item>(structuredClone(emptyItem));
+});
 watch(newItem, () => {
   errors.value = [];
 }, {
@@ -158,10 +157,13 @@ function addItem() {
     return;
   }
 
-  // Once we add the item to the list, make sure we update the edit list too.
-  listsStore.addItem(chosenList.id, newItem.value);
-  newItems.value = structuredClone(toRaw(chosenList.items));
-  newItem.value = emptyItem;
+  // Saving the list is handled when leaving edit mode.
+  newItems.value.push(newItem.value);
+  newItem.value = {
+    id: 0,
+    name: '',
+    weight: 1,
+  };
 }
 
 function pickRandomItem() {
