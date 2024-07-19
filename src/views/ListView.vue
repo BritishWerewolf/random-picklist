@@ -11,31 +11,32 @@
             :colors="['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple']"
         />
 
-        <div v-if="editMode">
-            <Heading-3>Add an item</Heading-3>
-            <p v-if="hasError('general')" class="error">{{ getError('general').message }}</p>
+        <section v-if="editMode" class="md:flex md:flex-row md:flex-wrap md:gap-4">
+            <div class="flex-1">
+                <Heading-3>Add an item</Heading-3>
+                <p v-if="hasError('general')" class="error">{{ getError('general').message }}</p>
 
-            <div class="my-2">
-                <Label>Name</Label>
-                <Input type="text" v-model="newItem.name" />
-                <p v-if="hasError('name')" class="error">{{ getError('name').message }}</p>
+                <div class="my-2">
+                    <Label>Name</Label>
+                    <Input type="text" v-model="newItem.name" />
+                    <p v-if="hasError('name')" class="error">{{ getError('name').message }}</p>
+                </div>
+                <div class="my-2">
+                    <Label>Weight</Label>
+                    <Input type="number" v-model="newItem.weight" />
+                    <p v-if="hasError('weight')" class="error">{{ getError('weight').message }}</p>
+                </div>
+
+                <Button @click="addItem">Add item!</Button>
             </div>
-            <div class="my-2">
-                <Label>Weight</Label>
-                <Input type="number" v-model="newItem.weight" />
-                <p v-if="hasError('weight')" class="error">{{ getError('weight').message }}</p>
-            </div>
 
-            <Button @click="addItem">Add item!</Button>
-
-            <div class="mt-4">
-                <Button @click="saveEdits">Save</Button>
-
+            <div class="flex-1">
                 <Table>
                     <template #thead?>
                         <TableRow>
                             <TableHead>Name</TableHead>
                             <TableHead>Weight</TableHead>
+                            <TableHead></TableHead>
                         </TableRow>
                       </template>
                       <TableRow v-for="item in newItems" :key="item.id">
@@ -45,10 +46,15 @@
                           <TableData>
                               <Input v-model="item.weight" type="number" />
                           </TableData>
+                          <TableData>
+                              <Button @click="removeItem(item)" variant="destructive">Remove</Button>
+                          </TableData>
                       </TableRow>
                 </Table>
+
+                <Button @click="saveEdits">Save</Button>
             </div>
-        </div>
+        </section>
         <div v-else>
             <Button @click="pickRandomItem">Pick an item!</Button>
 
@@ -93,6 +99,9 @@ function toggleEdit() {
     cancelEdits();
   }
 }
+function removeItem(item: Item) {
+  newItems.value = newItems.value.filter(curItem => curItem.id !== item.id);
+}
 function saveEdits() {
   editMode.value = false;
   chosenList.items = newItems.value;
@@ -136,7 +145,9 @@ function addItem() {
     return;
   }
 
+  // Once we add the item to the list, make sure we update the edit list too.
   listsStore.addItem(chosenList.id, newItem.value);
+  newItems.value = structuredClone(toRaw(chosenList.items));
   newItem.value = emptyItem;
 }
 
