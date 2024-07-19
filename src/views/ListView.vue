@@ -22,8 +22,14 @@
                     <p v-if="hasError('name')" class="error">{{ getError('name').message }}</p>
                 </div>
                 <div class="my-2">
-                    <Label>Weight</Label>
-                    <Input type="number" v-model="newItem.weight" />
+                    <Label for="newItemWeight">Weight</Label>
+                    <NumberField id="newItemWeight" v-model="newItem.weight">
+                        <NumberFieldContent>
+                            <NumberFieldDecrement />
+                            <NumberFieldInput />
+                            <NumberFieldIncrement />
+                        </NumberFieldContent>
+                    </NumberField>
                     <p v-if="hasError('weight')" class="error">{{ getError('weight').message }}</p>
                 </div>
 
@@ -44,7 +50,13 @@
                               <Input v-model="item.name" />
                           </TableData>
                           <TableData>
-                              <Input v-model="item.weight" type="number" />
+                              <NumberField id="weight" v-model="item.weight">
+                                  <NumberFieldContent>
+                                      <NumberFieldDecrement />
+                                      <NumberFieldInput />
+                                      <NumberFieldIncrement />
+                                  </NumberFieldContent>
+                              </NumberField>
                           </TableData>
                           <TableData>
                               <Button @click="removeItem(item)" variant="destructive">Remove</Button>
@@ -77,6 +89,7 @@ import { Button } from '@/components/ui/button';
 import { DonutChart } from '@/components/ui/chart-donut';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput, } from '@/components/ui/number-field';
 import { Heading1, Heading2, Heading3 } from '@/components/ui/typography';
 import { Table, TableRow, TableHead, TableData } from '@/components/ui/typography';
 
