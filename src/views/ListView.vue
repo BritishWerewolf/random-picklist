@@ -59,7 +59,10 @@
                               </NumberField>
                           </TableData>
                           <TableData>
-                              <Button @click="removeItem(item)" variant="destructive">Remove</Button>
+                              <Button @click="removeItem(item)" variant="destructive">
+                                  <Trash2 class="block md:hidden" />
+                                  <span class="hidden md:block">Remove</span>
+                              </Button>
                           </TableData>
                       </TableRow>
                 </Table>
@@ -85,6 +88,7 @@ import { ref, toRaw, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useListsStore } from '@/stores/lists';
 
+import { Trash2 } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import { DonutChart } from '@/components/ui/chart-donut';
 import { Input } from '@/components/ui/input';
