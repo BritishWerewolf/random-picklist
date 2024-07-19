@@ -13,7 +13,8 @@ build-dev: install-deps
 
 # Type-check, compile and minify for production.
 build-prod: install-deps
-    npx run-p type-check "build-only {@}" --
+    just type-check
+    just build
 
 # Build only.
 build: install-deps
@@ -22,7 +23,7 @@ build: install-deps
 
 # Run unit tests.
 test-unit:
-    npx vitest
+    npx vitest run
 
 # Run the TypeScript compiler.
 type-check:
