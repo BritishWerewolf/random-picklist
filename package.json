@@ -15,11 +15,11 @@
   },
   "dependencies": {
     "@unovis/ts": "^1.4.2",
-    "@unovis/vue": "^1.4.2",
+    "@unovis/vue": "^1.4.3",
     "@vueuse/core": "^10.11.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "lucide-vue-next": "^0.408.0",
+    "lucide-vue-next": "^0.411.0",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
     "radix-vue": "^1.9.1",
@@ -33,7 +33,7 @@
     "@stylistic/eslint-plugin-ts": "^2.3.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/jsdom": "^21.1.6",
-    "@types/node": "^20.12.5",
+    "@types/node": "^20.14.11",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/eslint-config-typescript": "^13.0.0",
     "@vue/test-utils": "^2.4.5",
@@ -45,10 +45,10 @@
     "npm-run-all2": "^6.1.2",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.4",
-    "typescript": "~5.4.0",
+    "typescript": "~5.5.3",
     "vite": "^5.2.8",
     "vite-plugin-vue-devtools": "^7.0.25",
-    "vitest": "^1.4.0",
+    "vitest": "^2.0.3",
     "vue-tsc": "^2.0.11"
   }
 }
