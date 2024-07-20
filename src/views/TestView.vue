@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { DonutChart } from '@/components/ui/chart-donut';
-import { Heading1 } from '@/components/ui/typography';
-import { Table, TableRow, TableHead, TableData } from '@/components/ui/typography';
+import {
+  Heading1,
+  Table, TableRow, TableHead, TableData
+} from '@/components/ui/typography';
 
 const data = [
   { name: 'Jan', total: Math.floor(Math.random() * 2000) + 500, predicted: Math.floor(Math.random() * 2000) + 500 },
@@ -18,28 +20,28 @@ const valueFormatter = (tick: number | Date) => typeof tick === 'number'
 </script>
 
 <template>
-    <div>
-        <Heading-1>Test</Heading-1>
-        <Table>
-            <template #thead>
-                <TableRow>
-                    <TableHead>First</TableHead>
-                    <TableHead>Second</TableHead>
-                </TableRow>
-            </template>
-            <TableRow>
-                <TableData>1111</TableData>
-                <TableData>2222</TableData>
-            </TableRow>
-        </Table>
+  <div>
+    <Heading-1>Test</Heading-1>
+    <Table>
+      <template #thead>
+        <TableRow>
+          <TableHead>First</TableHead>
+          <TableHead>Second</TableHead>
+        </TableRow>
+      </template>
+      <TableRow>
+        <TableData>1111</TableData>
+        <TableData>2222</TableData>
+      </TableRow>
+    </Table>
 
-        <DonutChart
-            index="name"
-            category="total"
-            type="pie"
-            :data="data"
-            :value-formatter="valueFormatter"
-            :colors="['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple']"
-        />
-    </div>
+    <DonutChart
+      index="name"
+      category="total"
+      type="pie"
+      :data="data"
+      :value-formatter="valueFormatter"
+      :colors="['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple']"
+    />
+  </div>
 </template>

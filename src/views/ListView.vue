@@ -1,88 +1,3 @@
-<template>
-    <div>
-        <Heading-1>Random picker</Heading-1>
-        <Heading-2>{{ $route.params.name }} <span @click="toggleEdit">{{ editMode ? '[Cancel]' : '[Edit]' }}</span></Heading-2>
-
-        <DonutChart
-            index="name"
-            category="weight"
-            type="pie"
-            :data="editMode ? newItems : chosenList.items"
-            :colors="['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple']"
-        />
-
-        <section v-if="editMode" class="md:flex md:flex-row md:flex-wrap md:gap-4">
-            <div class="flex-1">
-                <Heading-3>Add an item</Heading-3>
-                <p v-if="hasError('general')" class="error">{{ getError('general').message }}</p>
-
-                <div class="my-2">
-                    <Label>Name</Label>
-                    <Input type="text" v-model="newItem.name" />
-                    <p v-if="hasError('name')" class="error">{{ getError('name').message }}</p>
-                </div>
-                <div class="my-2">
-                    <Label for="newItemWeight">Weight</Label>
-                    <NumberField id="newItemWeight" v-model="newItem.weight">
-                        <NumberFieldContent>
-                            <NumberFieldDecrement />
-                            <NumberFieldInput />
-                            <NumberFieldIncrement />
-                        </NumberFieldContent>
-                    </NumberField>
-                    <p v-if="hasError('weight')" class="error">{{ getError('weight').message }}</p>
-                </div>
-
-                <Button @click="addItem">Add item!</Button>
-            </div>
-
-            <div class="flex-1">
-                <Table>
-                    <template #thead>
-                        <TableRow>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Weight</TableHead>
-                            <TableHead></TableHead>
-                        </TableRow>
-                      </template>
-                      <TableRow v-for="item in newItems" :key="item.id">
-                          <TableData>
-                              <Input v-model="item.name" />
-                          </TableData>
-                          <TableData>
-                              <NumberField id="weight" v-model="item.weight">
-                                  <NumberFieldContent>
-                                      <NumberFieldDecrement />
-                                      <NumberFieldInput />
-                                      <NumberFieldIncrement />
-                                  </NumberFieldContent>
-                              </NumberField>
-                          </TableData>
-                          <TableData>
-                              <Button @click="removeItem(item)" variant="destructive">
-                                  <Trash2 class="block md:hidden" />
-                                  <span class="hidden md:block">Remove</span>
-                              </Button>
-                          </TableData>
-                      </TableRow>
-                </Table>
-
-                <Button @click="saveEdits">Save</Button>
-            </div>
-        </section>
-        <div v-else>
-            <Button @click="pickRandomItem">Pick an item!</Button>
-
-            <p class="text-3xl text-red-600">{{ chosenItem.name }}</p>
-
-            <div class="mt-3">
-                <Heading-3>Weights</Heading-3>
-                <p v-for="item in chosenList.items" :key="item.name">{{ item.name }}: {{ item.weight }}</p>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
 import { ref, toRaw, watch } from 'vue';
 import { useRoute } from 'vue-router';
@@ -94,8 +9,10 @@ import { DonutChart } from '@/components/ui/chart-donut';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput, } from '@/components/ui/number-field';
-import { Heading1, Heading2, Heading3 } from '@/components/ui/typography';
-import { Table, TableRow, TableHead, TableData } from '@/components/ui/typography';
+import {
+  Heading1, Heading2, Heading3,
+  Table, TableRow, TableHead, TableData
+} from '@/components/ui/typography';
 
 const listsStore = useListsStore();
 const route = useRoute();
@@ -200,3 +117,88 @@ function getError(key: string) {
   return errors.value.filter(error => error.key === key)[0];
 }
 </script>
+
+<template>
+  <div>
+    <Heading-1>Random picker</Heading-1>
+    <Heading-2>{{ $route.params.name }} <span @click="toggleEdit">{{ editMode ? '[Cancel]' : '[Edit]' }}</span></Heading-2>
+
+    <DonutChart
+      index="name"
+      category="weight"
+      type="pie"
+      :data="editMode ? newItems : chosenList.items"
+      :colors="['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple']"
+    />
+
+    <section v-if="editMode" class="md:flex md:flex-row md:flex-wrap md:gap-4">
+      <div class="flex-1">
+        <Heading-3>Add an item</Heading-3>
+        <p v-if="hasError('general')" class="error">{{ getError('general').message }}</p>
+
+        <div class="my-2">
+          <Label>Name</Label>
+          <Input type="text" v-model="newItem.name" />
+          <p v-if="hasError('name')" class="error">{{ getError('name').message }}</p>
+        </div>
+        <div class="my-2">
+          <Label for="newItemWeight">Weight</Label>
+          <NumberField id="newItemWeight" v-model="newItem.weight">
+            <NumberFieldContent>
+              <NumberFieldDecrement />
+              <NumberFieldInput />
+              <NumberFieldIncrement />
+            </NumberFieldContent>
+          </NumberField>
+          <p v-if="hasError('weight')" class="error">{{ getError('weight').message }}</p>
+        </div>
+
+        <Button @click="addItem">Add item!</Button>
+      </div>
+
+      <div class="flex-1">
+        <Table>
+          <template #thead>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Weight</TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </template>
+          <TableRow v-for="item in newItems" :key="item.id">
+            <TableData>
+              <Input v-model="item.name" />
+            </TableData>
+            <TableData>
+              <NumberField id="weight" v-model="item.weight">
+                <NumberFieldContent>
+                  <NumberFieldDecrement />
+                  <NumberFieldInput />
+                  <NumberFieldIncrement />
+                </NumberFieldContent>
+              </NumberField>
+            </TableData>
+            <TableData>
+              <Button @click="removeItem(item)" variant="destructive">
+                <Trash2 class="block md:hidden" />
+                <span class="hidden md:block">Remove</span>
+              </Button>
+            </TableData>
+          </TableRow>
+        </Table>
+
+        <Button @click="saveEdits">Save</Button>
+      </div>
+    </section>
+    <div v-else>
+      <Button @click="pickRandomItem">Pick an item!</Button>
+
+      <p class="text-3xl text-red-600">{{ chosenItem.name }}</p>
+
+      <div class="mt-3">
+        <Heading-3>Weights</Heading-3>
+        <p v-for="item in chosenList.items" :key="item.name">{{ item.name }}: {{ item.weight }}</p>
+      </div>
+    </div>
+  </div>
+</template>

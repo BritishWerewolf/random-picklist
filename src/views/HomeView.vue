@@ -1,7 +1,3 @@
-<template>
-    <Heading-1>Home</Heading-1>
-</template>
-
 <script setup lang="ts">
 import { useListsStore } from '@/stores/lists';
 
@@ -26,3 +22,7 @@ if (listsStore.lists.length === 0) {
   listsStore.addItem(listsStore.lists[1].id, { id: 10, name: 'Echo', weight: 1 });
 }
 </script>
+
+<template>
+  <Heading-1>Home</Heading-1>
+</template>

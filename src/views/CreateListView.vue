@@ -1,16 +1,3 @@
-<template>
-    <Heading-1 class="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">Create a new list</Heading-1>
-    <form @submit.prevent="createList">
-        <div>
-            <Label for="name">Name</Label>
-            <Input v-model="name" id="name" name="name" placeholder="Name" />
-            <p v-if="hasError('name')" class="error">{{ getError('name').message }}</p>
-        </div>
-
-        <Button>Create</Button>
-    </form>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useListsStore } from '@/stores/lists';
@@ -43,3 +30,16 @@ function getError(key: string) {
   return errors.value.filter(error => error.key === key)[0];
 }
 </script>
+
+<template>
+  <Heading-1>Create a new list</Heading-1>
+  <form @submit.prevent="createList">
+    <div>
+      <Label for="name">Name</Label>
+      <Input v-model="name" id="name" name="name" placeholder="Name" />
+      <p v-if="hasError('name')" class="error">{{ getError('name').message }}</p>
+    </div>
+
+    <Button>Create</Button>
+  </form>
+</template>
