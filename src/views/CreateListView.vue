@@ -36,7 +36,12 @@ function getError(key: string) {
   <form @submit.prevent="createList">
     <div>
       <Label for="name">Name</Label>
-      <Input v-model="name" id="name" name="name" placeholder="Name" />
+      <Input
+        id="name"
+        v-model="name"
+        name="name"
+        placeholder="Name"
+      />
       <p v-if="hasError('name')" class="error">{{ getError('name').message }}</p>
     </div>
 

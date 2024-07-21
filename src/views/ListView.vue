@@ -138,7 +138,7 @@ function getError(key: string) {
 
         <div class="my-2">
           <Label>Name</Label>
-          <Input type="text" v-model="newItem.name" />
+          <Input v-model="newItem.name" type="text" />
           <p v-if="hasError('name')" class="error">{{ getError('name').message }}</p>
         </div>
         <div class="my-2">
@@ -162,7 +162,7 @@ function getError(key: string) {
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Weight</TableHead>
-              <TableHead></TableHead>
+              <TableHead />
             </TableRow>
           </template>
           <TableRow v-for="item in newItems" :key="item.id">
@@ -179,7 +179,7 @@ function getError(key: string) {
               </NumberField>
             </TableData>
             <TableData>
-              <Button @click="removeItem(item)" variant="destructive">
+              <Button variant="destructive" @click="removeItem(item)">
                 <Trash2 class="block md:hidden" />
                 <span class="hidden md:block">Remove</span>
               </Button>

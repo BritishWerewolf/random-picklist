@@ -11,9 +11,11 @@ const listsStore = useListsStore();
     <RouterLink :to="{ name: 'create' }">Create list</RouterLink>
     <RouterLink
       v-for="list in listsStore.lists"
-      :to="{ name: 'list', params: { name: list.name } }"
       :key="`/list/${list.name}`"
-    >{{ list.name }}</RouterLink>
+      :to="{ name: 'list', params: { name: list.name } }"
+    >
+      {{ list.name }}
+    </RouterLink>
   </nav>
 
   <div>
