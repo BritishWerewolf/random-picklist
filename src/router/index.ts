@@ -21,6 +21,49 @@ const router = createRouter({
       component: () => import('../views/CreateListView.vue'),
     },
     {
+      path: '/share/:data',
+      name: 'share',
+      redirect(to) {
+        if (typeof to.params.data !== 'string') {
+          return { name: 'home' };
+        }
+
+        const json = JSON.parse(atob(to.params.data));
+        if (!json.name && !json.weights) {
+          return { name: 'home' };
+        }
+
+        const listName = json.name.trim().match(/(\w+)/)[0];
+        if (!listName) {
+          return { name: 'home' };
+        }
+
+        const listsStore = useListsStore();
+        let list: List;
+        if (listsStore.listNames.includes(listName)) {
+          list = listsStore.lists.filter(l => l.name === listName)[0];
+          list.items = [];
+        } else {
+          list = listsStore.createList(listName);
+        }
+
+        for (let i = 0; i < json.items.length; i++) {
+          listsStore.addItem(list.id, {
+            id: i + 1,
+            name: json.items[i].name,
+            weight: json.items[i].weight,
+          });
+        }
+
+        return {
+          name: 'list',
+          params: {
+            name: listName,
+          }
+        };
+      },
+    },
+    {
       path: '/list/:name',
       name: 'list',
       component: () => import('../views/ListView.vue'),

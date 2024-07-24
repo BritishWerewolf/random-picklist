@@ -22,6 +22,22 @@ const chosenList: List = listsStore.lists.filter(list => list.name === route.par
 let chosenItem = ref<Item>({ id: 0, name: '', weight: 1 });
 let newItems = ref<Array<Item>>([]);
 
+let showCopySuccess = ref(false);
+function copyToClipboard() {
+  let data = {
+    name: chosenList.name,
+    items: chosenList.items,
+  };
+  let encoded = btoa(JSON.stringify(data));
+  let baseUrl = window.location.href.match(/(.+)(?=\/list\/)/)?.[0];
+  navigator.clipboard.writeText(`${baseUrl}/share/${encoded}`);
+
+  showCopySuccess.value = true;
+  setTimeout(() => {
+    showCopySuccess.value = false;
+  }, 2000);
+}
+
 let editMode = ref(false);
 function toggleEdit() {
   editMode.value = !editMode.value;
@@ -122,6 +138,14 @@ function getError(key: string) {
   <div>
     <Heading-1>Random picker</Heading-1>
     <Heading-2>{{ $route.params.name }} <span @click="toggleEdit">{{ editMode ? '[Cancel]' : '[Edit]' }}</span></Heading-2>
+    <div class="flex items-center gap-4">
+      <div>
+        <Button :disabled="showCopySuccess" @click="copyToClipboard">Share</Button>
+      </div>
+      <div v-show="showCopySuccess" class="text-green-500">
+        <p>URL copied to clipboard!</p>
+      </div>
+    </div>
 
     <DonutChart
       index="name"
