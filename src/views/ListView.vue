@@ -215,9 +215,9 @@ function getError(key: string) {
       </div>
     </section>
     <div v-else>
-      <Button @click="pickRandomItem">Pick an item!</Button>
+      <p id="winner" class="text-6xl text-center">{{ chosenItem.name }}</p>
 
-      <p class="text-3xl text-red-600">{{ chosenItem.name }}</p>
+      <Button @click="pickRandomItem">Pick an item!</Button>
 
       <div class="mt-3">
         <Heading-3>Weights</Heading-3>
