@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput, } from '@/components/ui/number-field';
 import {
-  Heading1, Heading2, Heading3,
+  Heading1, Heading2,
   Table, TableRow, TableHead, TableData
 } from '@/components/ui/typography';
 
@@ -136,28 +136,35 @@ function getError(key: string) {
 
 <template>
   <div>
-    <Heading-1>Random picker</Heading-1>
-    <Heading-2>{{ $route.params.name }} <span @click="toggleEdit">{{ editMode ? '[Cancel]' : '[Edit]' }}</span></Heading-2>
-    <div class="flex items-center gap-4">
+    <Heading-1 class="pb-2 text-center">{{ chosenList.name }}</Heading-1>
+    <div class="flex flex-col items-center justify-center my-4">
       <div>
+        <Button variant="secondary" class="mr-2" @click="toggleEdit">{{ editMode ? 'Cancel' : 'Edit' }}</Button>
         <Button :disabled="showCopySuccess" @click="copyToClipboard">Share</Button>
       </div>
-      <div v-show="showCopySuccess" class="text-green-500">
+      <div :class="{ 'opacity-1': showCopySuccess, 'opacity-0': !showCopySuccess }" class="text-green-500 transition-opacity duration-300">
         <p>URL copied to clipboard!</p>
       </div>
     </div>
 
-    <DonutChart
-      index="name"
-      category="weight"
-      type="pie"
-      :data="editMode ? newItems : chosenList.items"
-      :colors="['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple']"
-    />
+    <div class="md:flex md:flex-row md:gap-4">
+      <div class="md:w-4/5 md:pl-[calc(20%)]">
+        <DonutChart
+          index="name"
+          category="weight"
+          type="pie"
+          :data="editMode ? newItems : chosenList.items"
+        />
+      </div>
+      <div class="my-4 text-center md:my-0 md:text-left md:w-1/5">
+        <Heading-2>Weights</Heading-2>
+        <p v-for="item in chosenList.items" :key="item.name">{{ item.name }}: {{ item.weight }}</p>
+      </div>
+    </div>
 
     <section v-if="editMode" class="md:flex md:flex-row md:flex-wrap md:gap-4">
       <div class="flex-1">
-        <Heading-3>Add an item</Heading-3>
+        <Heading-2>Add an item</Heading-2>
         <p v-if="hasError('general')" class="error">{{ getError('general').message }}</p>
 
         <div class="my-2">
@@ -217,11 +224,8 @@ function getError(key: string) {
     <div v-else>
       <p id="winner" class="text-6xl text-center">{{ chosenItem.name }}</p>
 
-      <Button @click="pickRandomItem">Pick an item!</Button>
-
-      <div class="mt-3">
-        <Heading-3>Weights</Heading-3>
-        <p v-for="item in chosenList.items" :key="item.name">{{ item.name }}: {{ item.weight }}</p>
+      <div class="mt-4 text-center">
+        <Button size="lg" @click="pickRandomItem">Pick an item!</Button>
       </div>
     </div>
   </div>
