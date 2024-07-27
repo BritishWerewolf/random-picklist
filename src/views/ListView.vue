@@ -18,15 +18,15 @@ const listsStore = useListsStore();
 const route = useRoute();
 // Force `as List` because we are checking if the list exists _before_ this page
 // can load.
-const chosenList: List = listsStore.lists.filter(list => list.name === route.params.name)[0];
+const chosenList = ref<List>(listsStore.lists.filter(list => list.name === route.params.name)[0]);
 let chosenItem = ref<Item>({ id: 0, name: '', weight: 1 });
-let newItems = ref<Array<Item>>([]);
+let newList = ref<List>({ id: 0, name: '', items: [] });
 
 let showCopySuccess = ref(false);
 function copyToClipboard() {
   let data = {
-    name: chosenList.name,
-    items: chosenList.items,
+    name: chosenList.value.name,
+    items: chosenList.value.items,
   };
   let encoded = btoa(JSON.stringify(data));
   let baseUrl = window.location.href.match(/(.+)(?=\/list\/)/)?.[0];
@@ -44,17 +44,18 @@ function toggleEdit() {
 
   // Weren't editing, now we are, so save the previous items.
   if (editMode.value) {
-    newItems.value = structuredClone(toRaw(chosenList.items));
+    newList.value = structuredClone(toRaw(chosenList.value));
   } else {
     cancelEdits();
   }
 }
 function removeItem(item: Item) {
-  newItems.value = newItems.value.filter(curItem => curItem.id !== item.id);
+  newList.value.items = newList.value.items.filter(curItem => curItem.id !== item.id);
 }
 function saveEdits() {
   editMode.value = false;
-  chosenList.items = newItems.value;
+  listsStore.setList(chosenList.value.id, newList.value);
+  chosenList.value = newList.value;
 }
 function cancelEdits() {
   editMode.value = false;
@@ -95,7 +96,7 @@ function addItem() {
   }
 
   // Saving the list is handled when leaving edit mode.
-  newItems.value.push(newItem.value);
+  newList.value.items.push(newItem.value);
   newItem.value = {
     id: 0,
     name: '',
@@ -105,7 +106,7 @@ function addItem() {
 
 function pickRandomItem() {
   // Increment all weights by 1.
-  const items = chosenList.items
+  const items = chosenList.value.items
     .map(item => ({ ...item, weight: item.weight++ }));
 
   // Calculate cumulative weights.
@@ -122,7 +123,7 @@ function pickRandomItem() {
   chosenItem.value = items[randomIndex];
 
   // Reset the weight of the selected item to 1.
-  chosenList.items[randomIndex].weight = 1;
+  chosenList.value.items[randomIndex].weight = 1;
 }
 
 let errors = ref<Array<AppError>>([]);
@@ -136,11 +137,14 @@ function getError(key: string) {
 
 <template>
   <div>
-    <Heading-1 class="pb-2 text-center">{{ chosenList.name }}</Heading-1>
+    <Input v-if="editMode" v-model="newList.name" class="box-content p-2 mb-2 text-4xl font-bold text-center focus:text-4xl" />
+    <Heading-1 v-else class="pb-2 text-center">{{ chosenList.name }}</Heading-1>
+
     <div class="flex flex-col items-center justify-center my-4">
       <div>
         <Button variant="secondary" class="mr-2" @click="toggleEdit">{{ editMode ? 'Cancel' : 'Edit' }}</Button>
-        <Button :disabled="showCopySuccess" @click="copyToClipboard">Share</Button>
+        <Button v-if="editMode" class="mr-2" @click="saveEdits">Save</Button>
+        <Button v-else :disabled="showCopySuccess" @click="copyToClipboard">Share</Button>
       </div>
       <div :class="{ 'opacity-1': showCopySuccess, 'opacity-0': !showCopySuccess }" class="text-green-500 transition-opacity duration-300">
         <p>URL copied to clipboard!</p>
@@ -153,7 +157,7 @@ function getError(key: string) {
           index="name"
           category="weight"
           type="pie"
-          :data="editMode ? newItems : chosenList.items"
+          :data="editMode ? newList.items : chosenList.items"
         />
       </div>
       <div class="my-4 text-center md:my-0 md:text-left md:w-1/5">
@@ -196,7 +200,7 @@ function getError(key: string) {
               <TableHead />
             </TableRow>
           </template>
-          <TableRow v-for="item in newItems" :key="item.id">
+          <TableRow v-for="item in newList.items" :key="item.id">
             <TableData>
               <Input v-model="item.name" />
             </TableData>
