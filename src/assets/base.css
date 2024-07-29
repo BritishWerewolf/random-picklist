@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-nav { z-index: 100; }
-
 /* Prevent mobiles from zooming when entering data */
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   select:focus,
