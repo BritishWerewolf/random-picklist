@@ -1,28 +1,13 @@
 <script setup lang="ts">
-import { useListsStore } from '@/stores/lists';
-
-import { Heading1 } from '@/components/ui/typography';
-
-const listsStore = useListsStore();
-
-// Mock the database.
-if (listsStore.lists.length === 0) {
-  listsStore.createList('Numbers');
-  listsStore.addItem(listsStore.lists[0].id, { id: 1, name: 'First', weight: 1 });
-  listsStore.addItem(listsStore.lists[0].id, { id: 2, name: 'Second', weight: 1 });
-  listsStore.addItem(listsStore.lists[0].id, { id: 3, name: 'Third', weight: 1 });
-  listsStore.addItem(listsStore.lists[0].id, { id: 4, name: 'Fourth', weight: 1 });
-  listsStore.addItem(listsStore.lists[0].id, { id: 5, name: 'Fifth', weight: 1 });
-
-  listsStore.createList('Alphabet');
-  listsStore.addItem(listsStore.lists[1].id, { id: 6, name: 'Alpha', weight: 1 });
-  listsStore.addItem(listsStore.lists[1].id, { id: 7, name: 'Beta', weight: 1 });
-  listsStore.addItem(listsStore.lists[1].id, { id: 8, name: 'Charlie', weight: 1 });
-  listsStore.addItem(listsStore.lists[1].id, { id: 9, name: 'Delta', weight: 1 });
-  listsStore.addItem(listsStore.lists[1].id, { id: 10, name: 'Echo', weight: 1 });
-}
+import { Heading1, Heading2 } from '@/components/ui/typography';
 </script>
 
 <template>
-  <Heading-1>Home</Heading-1>
+  <Heading-1>Random Picklist</Heading-1>
+  <p>A simple app that randomly selects a weighted item from a list.</p>
+  <p>Create a list of items and assign a weight. Upon picking an item, the selected item will be reset to a weight of 1, and all others will increase by 1.</p>
+
+  <Heading-2>Weights</Heading-2>
+  <p>Weights are just a way of determining how likely an item will be selected.</p>
+  <p>The higher the weight, the more likely it is to be selected. That does not mean that the highest item will be selected, just that it has more of a possibility of appearing next. This helps with ensuring that, with each new selection, each item that hasn't been chosen becomes more likely to be selected next time.</p>
 </template>
