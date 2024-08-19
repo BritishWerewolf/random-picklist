@@ -17,7 +17,7 @@ const listsStore = useListsStore();
   <nav class="mb-4">
     <Sheet>
       <SheetTrigger>
-        <Button variant="outline">
+        <Button>
           Open Menu
         </Button>
       </SheetTrigger>

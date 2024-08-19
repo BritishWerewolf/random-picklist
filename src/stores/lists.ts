@@ -18,12 +18,12 @@ export const useListsStore = defineStore('lists', () => {
     });
   }
 
-  function createList(name: string): List {
+  function createList(name: string, items: Array<Item> = []): List {
     // Create a variable so that we can return it after pushing.
     const list: List = {
       id: lists.value.length + 1,
       name,
-      items: [],
+      items,
     };
     lists.value.push(list);
     return list;
