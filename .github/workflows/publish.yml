@@ -1,0 +1,30 @@
+name: Publish site
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  surge:
+    name: Publish on surge.sh
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install casey/just
+        uses: extractions/setup-just@v1
+        with:
+          just-version: '1.34.0'
+
+      - name: Build production
+        run: just build-prod
+
+      - name: Deploy to surge.sh
+        uses: dswistowski/surge-sh-action@v1
+        with:
+          domain: 'random-picklist.surge.sh'
+          project: 'dist'
+          login: ${{ secrets.surge_login }}
+          token: ${{ secrets.surge_token }}
