@@ -30,6 +30,8 @@ const listsStore = useListsStore();
           <RouterLink :to="{ name: 'home' }">Home</RouterLink>
           <RouterLink :to="{ name: 'create' }">Create list</RouterLink>
 
+          <hr class="border-2 rounded-lg">
+
           <RouterLink v-for="list in listsStore.lists" :key="`/list/${list.name}`" :to="{ name: 'list', params: { name: list.name } }">
             {{ list.name }}
           </RouterLink>
