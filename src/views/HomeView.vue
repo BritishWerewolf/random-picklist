@@ -1,14 +1,31 @@
 <script setup lang="ts">
-import { DonutChart } from '@/components/ui/chart-donut';
-import { Heading2, HeroText } from '@/components/ui/typography';
+import { ref } from 'vue';
 
-const fakeData = [
-  { name: 'Item 1', weight: 1, },
-  { name: 'Item 2', weight: 2, },
-  { name: 'Item 3', weight: 1, },
-  { name: 'Item 4', weight: 4, },
-  { name: 'Item 5', weight: 1, },
-];
+import { DonutChart } from '@/components/ui/chart-donut';
+import { Button } from '@/components/ui/button';
+import { Heading2, HeroText } from '@/components/ui/typography';
+import { getRandomItem } from '@/lib/lists';
+
+const fakeData = ref<List>({
+  id: 1,
+  name: 'Dinner Date',
+  items: [
+    { id: 1, name: 'Pizza', weight: 1, },
+    { id: 2, name: 'Burger', weight: 2, },
+    { id: 3, name: 'Steak', weight: 1, },
+    { id: 4, name: 'Tacos', weight: 4, },
+    { id: 5, name: 'Pasta Bake', weight: 1, },
+  ]
+});
+
+const selected = ref<Item>({
+  id: 0,
+  name: '',
+  weight: 1,
+});
+function selectItem() {
+  selected.value = getRandomItem(fakeData.value);
+}
 </script>
 
 <template>
@@ -16,13 +33,16 @@ const fakeData = [
     <div>
       <Hero-Text>Randomly picking an item <mark>the right way</mark></Hero-Text>
     </div>
-    <div>
+    <div class="text-center">
+      <p class="mb-4 text-xl font-bold">{{ fakeData.name }}</p>
       <DonutChart
         index="name"
         category="weight"
         type="pie"
-        :data="fakeData"
+        :data="fakeData.items"
       />
+      <Button size="lg" class="mt-4" @click="selectItem">Pick an item</Button>
+      <p class="text-lg text-primary">{{ selected.name }}</p>
     </div>
   </div>
   <div class="container">
