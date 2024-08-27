@@ -9,7 +9,7 @@ const props = defineProps<{
 
 <template>
     <h1 :class="cn(
-        'max-w-md py-20 mx-auto text-5xl font-extrabold leading-normal tracking-tight text-center scroll-m-20',
+        'max-w-sm py-20 mx-auto text-5xl font-extrabold leading-normal tracking-tight text-center scroll-m-20',
         props.class,
     )">
         <slot></slot>
