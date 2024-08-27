@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Heading1, Heading2 } from '@/components/ui/typography';
+import { Heading2, HeroText } from '@/components/ui/typography';
 </script>
 
 <template>
-  <Heading-1>Random Picklist</Heading-1>
+  <Hero-Text>Randomly picking an item from a list <mark>the right way</mark></Hero-Text>
   <p>A simple app that randomly selects a weighted item from a list.</p>
   <p>Create a list of items and assign a weight. Upon picking an item, the selected item will be reset to a weight of 1, and all others will increase by 1.</p>
 
