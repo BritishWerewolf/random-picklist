@@ -37,7 +37,7 @@ const listsStore = useListsStore();
       </SheetContent>
     </Sheet>
 
-    <a id="logo" href="/" class="ml-4 text-xl">Random Picklist</a>
+    <RouterLink id="logo" class="ml-4 text-xl" :to="{ name: 'home' }">Random Picklist</RouterLink>
   </nav>
 
   <div>
