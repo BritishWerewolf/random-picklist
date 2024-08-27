@@ -13,6 +13,7 @@ import {
   Heading1, Heading2,
   Table, TableRow, TableHead, TableData
 } from '@/components/ui/typography';
+import { getRandomItem } from '@/lib/lists';
 
 const listsStore = useListsStore();
 const route = useRoute();
@@ -105,25 +106,7 @@ function addItem() {
 }
 
 function pickRandomItem() {
-  // Increment all weights by 1.
-  const items = chosenList.value.items
-    .map(item => ({ ...item, weight: item.weight++ }));
-
-  // Calculate cumulative weights.
-  const cumulativeWeights: Array<number> = [];
-  let cumulativeWeight = 0;
-  items.forEach(item => {
-    cumulativeWeight += item.weight;
-    cumulativeWeights.push(cumulativeWeight);
-  });
-
-  // Generate a random index and store that item.
-  const randomWeight = Math.random() * cumulativeWeight;
-  const randomIndex = cumulativeWeights.findIndex(weight => weight >= randomWeight);
-  chosenItem.value = items[randomIndex];
-
-  // Reset the weight of the selected item to 1.
-  chosenList.value.items[randomIndex].weight = 1;
+  chosenItem.value = getRandomItem(chosenList.value);
 }
 
 let errors = ref<Array<AppError>>([]);
