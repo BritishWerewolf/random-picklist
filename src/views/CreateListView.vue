@@ -4,7 +4,6 @@ import { useListsStore } from '@/stores/lists';
 
 import { X } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
-import { CheckboxWithLabel } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput, } from '@/components/ui/number-field';
@@ -97,10 +96,7 @@ function getError(key: string) {
     </div>
 
     <div class="my-4">
-      <Heading-2>
-        {{ bulkAdd ? 'Add items' : 'Add an item' }}
-        <CheckboxWithLabel id="bulkAdd" v-model="bulkAdd">Bulk add</CheckboxWithLabel>
-      </Heading-2>
+      <Heading-2>Add an item</Heading-2>
 
       <div class="flex gap-4">
         <!-- Adding a single item -->
@@ -139,7 +135,6 @@ function getError(key: string) {
 
     <div class="flex gap-4">
       <Button @click="addItem">Add item!</Button>
-      <Button @click="bulkAdd = !bulkAdd">Bulk add</Button>
     </div>
 
     <Button class="mt-8" :disabled="list.name === '' || errors.length > 0" @click="createList">Create</Button>
