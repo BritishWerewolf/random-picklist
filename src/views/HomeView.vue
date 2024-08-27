@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { CircleArrowRight } from 'lucide-vue-next';
 import { ref } from 'vue';
 
 import { DonutChart } from '@/components/ui/chart-donut';
@@ -48,6 +49,12 @@ function selectItem() {
   <div class="container">
     <p class="text-lg">A simple app that randomly selects a weighted item from a list.</p>
     <p class="text-lg">Create a list of items and assign a weight. Upon picking an item, the selected item will be reset to a weight of 1, and all others will increase by 1.</p>
+    <RouterLink :to="{ name: 'create' }">
+      <Button class="my-8">
+        Get started
+        <CircleArrowRight class="ml-2" />
+      </Button>
+    </RouterLink>
   </div>
 
   <div class="container mt-8">
