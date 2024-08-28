@@ -19,10 +19,12 @@ const router = createRouter({
       path: '/share/:data',
       name: 'share',
       redirect(to) {
+        // No share URL was passed.
         if (typeof to.params.data !== 'string') {
           return { name: 'home' };
         }
 
+        // Decode the Base64 string and parse into JSON.
         const json = JSON.parse(atob(to.params.data));
         if (!json.name && !json.weights) {
           return { name: 'home' };
@@ -35,6 +37,8 @@ const router = createRouter({
 
         const listsStore = useListsStore();
         let list: List;
+        // See if the user already has that list saved in the store, otherwise
+        // create a new one.
         if (listsStore.listNames.includes(listName)) {
           list = listsStore.lists.filter(l => l.name === listName)[0];
           list.items = [];
@@ -74,7 +78,15 @@ const router = createRouter({
         }
       }
     },
-  ]
+  ],
+});
+
+// Regardless of the route, we want to close the navigation drawer.
+router.afterEach(() => {
+  const closeNavButton: HTMLButtonElement | null = document.querySelector("[id^='radix-vue-dialog-content-1'] button[class*='data-[state=open]'");
+  if (closeNavButton) {
+    closeNavButton.click();
+  }
 });
 
 export default router;
