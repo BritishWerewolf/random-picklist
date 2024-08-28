@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { useListsStore } from '@/stores/lists';
 
 import { X } from 'lucide-vue-next';
@@ -9,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput, } from '@/components/ui/number-field';
 import { Heading1, Heading2, Heading3 } from '@/components/ui/typography';
 
+const router = useRouter();
 const listsStore = useListsStore();
 
 let bulkAdd = ref(false);
@@ -64,6 +66,9 @@ function createList() {
   }
 
   list.value = listsStore.createList(list.value.name, newItems);
+
+  // Redirect to the newly created list
+  router.push({ name: 'list', params: { name: list.value.name } });
 }
 
 let errors = ref<Array<AppError>>([]);

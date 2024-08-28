@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { GitHubIcon, XIcon } from 'vue3-simple-icons';
 import { RouterLink, RouterView } from 'vue-router';
+
 import { useListsStore } from '@/stores/lists';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,7 +16,7 @@ const listsStore = useListsStore();
 </script>
 
 <template>
-  <nav class="mb-4">
+  <nav class="mb-4 grid grid-cols-[110px_1fr_100px]">
     <Sheet>
       <SheetTrigger>
         <Button>
@@ -40,6 +42,14 @@ const listsStore = useListsStore();
     </Sheet>
 
     <RouterLink id="logo" class="ml-4 text-xl" :to="{ name: 'home' }">Random Picklist</RouterLink>
+    <div class="flex flex-row justify-end gap-2">
+      <a href="https://github.com/BritishWerewolf/random-picklist">
+        <GitHubIcon />
+      </a>
+      <a href="https://twitter.com/BritWerewolf">
+        <XIcon />
+      </a>
+    </div>
   </nav>
 
   <div>
