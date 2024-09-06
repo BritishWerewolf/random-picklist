@@ -140,8 +140,7 @@ function getError(key: string) {
 
     <div class="flex gap-4">
       <Button @click="addItem">Add item!</Button>
+      <Button :disabled="list.name === '' || errors.length > 0" confirm @click="createList">Create</Button>
     </div>
-
-    <Button class="mt-8" :disabled="list.name === '' || errors.length > 0" @click="createList">Create</Button>
   </section>
 </template>
