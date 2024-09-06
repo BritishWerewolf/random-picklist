@@ -132,7 +132,7 @@ function getError(key: string) {
           <Heading-3>Items</Heading-3>
           <p v-for="item in items" :key="item.name">
             {{ item.name }}: {{ item.weight }}
-            <X class="inline-block" @click="removeItem(item)" />
+            <X class="inline-block cursor-pointer text-destructive" @click="removeItem(item)" />
           </p>
         </div>
       </div>
