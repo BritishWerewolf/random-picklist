@@ -29,6 +29,10 @@ export const useListsStore = defineStore('lists', () => {
     return list;
   }
 
+  function removeList(listId: number) {
+    lists.value = lists.value.filter(list => list.id !== listId);
+  }
+
   function setList(listId: number, newList: List): Array<List> {
     lists.value = lists.value.map(list => {
       if (list.id === listId) {
@@ -66,6 +70,7 @@ export const useListsStore = defineStore('lists', () => {
     /** Actions */
     addItem,
     createList,
+    removeList,
     setList,
     removeItem,
     totalWeight,

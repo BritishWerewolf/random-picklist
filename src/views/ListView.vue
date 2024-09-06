@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, toRaw, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useListsStore } from '@/stores/lists';
 
 import { Trash2 } from 'lucide-vue-next';
@@ -18,6 +18,7 @@ import { getRandomItem } from '@/lib/lists';
 const hasClipboardAPI = computed(() => navigator.clipboard);
 
 const listsStore = useListsStore();
+const router = useRouter();
 const route = useRoute();
 // Force `as List` because we are checking if the list exists _before_ this page
 // can load.
@@ -39,6 +40,11 @@ function copyToClipboard() {
   setTimeout(() => {
     showCopySuccess.value = false;
   }, 2000);
+}
+
+function removeList() {
+  listsStore.removeList(chosenList.value.id);
+  router.push('/');
 }
 
 let editMode = ref(false);
@@ -130,9 +136,9 @@ function getError(key: string) {
     <Heading1 v-else class="pb-2 text-center">{{ chosenList.name }}</Heading1>
 
     <div class="flex flex-col items-center justify-center my-4">
-      <div>
-        <Button variant="secondary" class="mr-2" @click="toggleEdit">{{ editMode ? 'Cancel' : 'Edit' }}</Button>
-        <Button v-if="editMode" class="mr-2" @click="saveEdits">Save</Button>
+      <div class="flex flex-row gap-2">
+        <Button variant="secondary" @click="toggleEdit">{{ editMode ? 'Cancel' : 'Edit' }}</Button>
+        <Button v-if="editMode" @click="saveEdits">Save</Button>
         <Button
           v-else-if="!editMode && hasClipboardAPI"
           :disabled="showCopySuccess"
@@ -140,6 +146,8 @@ function getError(key: string) {
         >
           Share
         </Button>
+
+        <Button class="bg-destructive text-destructive-foreground" confirm="Are you sure?" @click="removeList">Delete</Button>
       </div>
       <div
         :class="{ 'opacity-1': showCopySuccess, 'opacity-0': !showCopySuccess }"
@@ -151,13 +159,12 @@ function getError(key: string) {
 
     <div class="md:flex md:flex-row md:gap-4">
       <!-- Left / main area -->
-      <div class="md:w-4/5">
+      <div class="md:w-4/5 md:pl-[calc(20%-0.5rem)]">
         <DonutChart
           index="name"
           category="weight"
           type="pie"
           :data="editMode ? newList.items : chosenList.items"
-          class="md:pl-[calc(20%)]"
         />
 
         <section v-if="editMode" class="md:flex md:flex-row md:flex-wrap md:gap-4">
@@ -219,7 +226,7 @@ function getError(key: string) {
             <Button @click="saveEdits">Save</Button>
           </div>
         </section>
-        <div v-else class="md:pl-[calc(20%)]">
+        <div v-else>
           <div class="my-4 text-center">
             <Button size="lg" @click="pickRandomItem">Pick an item!</Button>
           </div>
