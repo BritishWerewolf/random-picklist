@@ -11,7 +11,7 @@ interface Props extends PrimitiveProps {
   variant?: ButtonVariants['variant'];
   size?: ButtonVariants['size'];
   class?: HTMLAttributes['class'];
-  confirm?: string;
+  confirm?: string | boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -19,13 +19,15 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 // Reactive state for managing confirmation
+const confirm = ref<boolean>(typeof props.confirm === 'undefined' ? false : (typeof props.confirm === 'boolean' ? props.confirm : true));
+const confirmMessage = ref<string>(typeof props.confirm === 'string' && props.confirm !== '' ? props.confirm : 'Are you sure?');
 const isConfirming = ref(false);
 const confirmDuration = 3000;
 const confirmTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
 // Function to handle the button click
 function handleClick(event: Event) {
-  if (props.confirm) {
+  if (confirm.value) {
     if (isConfirming.value) {
       // Second click when confirming
       resetConfirmState();
@@ -72,7 +74,7 @@ onBeforeUnmount(() => {
     :class="cn(buttonVariants({ variant, size }), props.class)"
     @click="handleClick"
   >
-    <span v-if="isConfirming">{{ props.confirm }}</span>
+    <span v-if="isConfirming">{{ confirmMessage }}</span>
     <slot v-else />
   </Primitive>
 </template>
