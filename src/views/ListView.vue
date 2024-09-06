@@ -122,99 +122,115 @@ function getError(key: string) {
 
 <template>
   <div>
-    <Input v-if="editMode" v-model="newList.name" class="box-content p-2 mb-2 text-4xl font-bold text-center focus:text-4xl" />
+    <Input
+      v-if="editMode"
+      v-model="newList.name"
+      class="box-content p-2 mb-2 text-4xl font-bold text-center focus:text-4xl"
+    />
     <Heading1 v-else class="pb-2 text-center">{{ chosenList.name }}</Heading1>
 
     <div class="flex flex-col items-center justify-center my-4">
       <div>
         <Button variant="secondary" class="mr-2" @click="toggleEdit">{{ editMode ? 'Cancel' : 'Edit' }}</Button>
         <Button v-if="editMode" class="mr-2" @click="saveEdits">Save</Button>
-        <Button v-else-if="!editMode && hasClipboardAPI" :disabled="showCopySuccess" @click="copyToClipboard">Share</Button>
+        <Button
+          v-else-if="!editMode && hasClipboardAPI"
+          :disabled="showCopySuccess"
+          @click="copyToClipboard"
+        >
+          Share
+        </Button>
       </div>
-      <div :class="{ 'opacity-1': showCopySuccess, 'opacity-0': !showCopySuccess }" class="text-green-500 transition-opacity duration-300">
+      <div
+        :class="{ 'opacity-1': showCopySuccess, 'opacity-0': !showCopySuccess }"
+        class="text-green-500 transition-opacity duration-300"
+      >
         <p>URL copied to clipboard!</p>
       </div>
     </div>
 
     <div class="md:flex md:flex-row md:gap-4">
-      <div class="md:w-4/5 md:pl-[calc(20%)]">
+      <!-- Left / main area -->
+      <div class="md:w-4/5">
         <DonutChart
           index="name"
           category="weight"
           type="pie"
           :data="editMode ? newList.items : chosenList.items"
+          class="md:pl-[calc(20%)]"
         />
-      </div>
-      <div class="my-4 text-center md:my-0 md:text-left md:w-1/5">
-        <Heading2>Weights</Heading2>
-        <p v-for="item in chosenList.items" :key="item.name">{{ item.name }}: {{ item.weight }}</p>
-      </div>
-    </div>
 
-    <section v-if="editMode" class="md:flex md:flex-row md:flex-wrap md:gap-4">
-      <div class="flex-1">
-        <Heading2>Add an item</Heading2>
-        <p v-if="hasError('general')" class="error">{{ getError('general').message }}</p>
+        <section v-if="editMode" class="md:flex md:flex-row md:flex-wrap md:gap-4">
+          <div class="flex-1">
+            <Heading2>Add an item</Heading2>
+            <p v-if="hasError('general')" class="error">{{ getError('general').message }}</p>
 
-        <div class="my-2">
-          <Label>Name</Label>
-          <Input v-model="newItem.name" type="text" />
-          <p v-if="hasError('name')" class="error">{{ getError('name').message }}</p>
-        </div>
-        <div class="my-2">
-          <Label for="newItemWeight">Weight</Label>
-          <NumberField id="newItemWeight" v-model="newItem.weight">
-            <NumberFieldContent>
-              <NumberFieldDecrement />
-              <NumberFieldInput />
-              <NumberFieldIncrement />
-            </NumberFieldContent>
-          </NumberField>
-          <p v-if="hasError('weight')" class="error">{{ getError('weight').message }}</p>
-        </div>
-
-        <Button @click="addItem">Add item!</Button>
-      </div>
-
-      <div class="flex-1">
-        <Table>
-          <template #thead>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Weight</TableHead>
-              <TableHead />
-            </TableRow>
-          </template>
-          <TableRow v-for="item in newList.items" :key="item.id">
-            <TableData>
-              <Input v-model="item.name" />
-            </TableData>
-            <TableData>
-              <NumberField id="weight" v-model="item.weight">
+            <div class="my-2">
+              <Label>Name</Label>
+              <Input v-model="newItem.name" type="text" />
+              <p v-if="hasError('name')" class="error">{{ getError('name').message }}</p>
+            </div>
+            <div class="my-2">
+              <Label for="newItemWeight">Weight</Label>
+              <NumberField id="newItemWeight" v-model="newItem.weight">
                 <NumberFieldContent>
                   <NumberFieldDecrement />
                   <NumberFieldInput />
                   <NumberFieldIncrement />
                 </NumberFieldContent>
               </NumberField>
-            </TableData>
-            <TableData>
-              <Button variant="destructive" @click="removeItem(item)">
-                <Trash2 class="block md:hidden" />
-                <span class="hidden md:block">Remove</span>
-              </Button>
-            </TableData>
-          </TableRow>
-        </Table>
+              <p v-if="hasError('weight')" class="error">{{ getError('weight').message }}</p>
+            </div>
 
-        <Button @click="saveEdits">Save</Button>
+            <Button @click="addItem">Add item!</Button>
+          </div>
+
+          <div class="flex-1">
+            <Table>
+              <template #thead>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Weight</TableHead>
+                  <TableHead />
+                </TableRow>
+              </template>
+              <TableRow v-for="item in newList.items" :key="item.id">
+                <TableData>
+                  <Input v-model="item.name" />
+                </TableData>
+                <TableData>
+                  <NumberField id="weight" v-model="item.weight">
+                    <NumberFieldContent>
+                      <NumberFieldDecrement />
+                      <NumberFieldInput />
+                      <NumberFieldIncrement />
+                    </NumberFieldContent>
+                  </NumberField>
+                </TableData>
+                <TableData>
+                  <Button variant="destructive" @click="removeItem(item)">
+                    <Trash2 class="block md:hidden" />
+                    <span class="hidden md:block">Remove</span>
+                  </Button>
+                </TableData>
+              </TableRow>
+            </Table>
+
+            <Button @click="saveEdits">Save</Button>
+          </div>
+        </section>
+        <div v-else class="md:pl-[calc(20%)]">
+          <div class="my-4 text-center">
+            <Button size="lg" @click="pickRandomItem">Pick an item!</Button>
+          </div>
+          <p id="winner" class="text-6xl text-center">{{ chosenItem.name }}</p>
+        </div>
       </div>
-    </section>
-    <div v-else>
-      <p id="winner" class="text-6xl text-center">{{ chosenItem.name }}</p>
 
-      <div class="mt-4 text-center">
-        <Button size="lg" @click="pickRandomItem">Pick an item!</Button>
+      <!-- Right / sidebar -->
+      <div class="my-4 text-center md:my-0 md:text-left md:w-1/5">
+        <Heading2>Weights</Heading2>
+        <p v-for="item in chosenList.items" :key="item.name">{{ item.name }}: {{ item.weight }}</p>
       </div>
     </div>
   </div>
