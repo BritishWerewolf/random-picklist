@@ -30,12 +30,13 @@ export const useListsStore = defineStore('lists', () => {
   }
 
   function setList(listId: number, newList: List): Array<List> {
-    return lists.value.map(list => {
+    lists.value = lists.value.map(list => {
       if (list.id === listId) {
         list = newList;
       }
       return list;
     });
+    return lists.value;
   }
 
   function removeItem(listId: number, itemId: number) {
