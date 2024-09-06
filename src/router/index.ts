@@ -81,6 +81,14 @@ const router = createRouter({
   ],
 });
 
+// We want to force the user to the HTTPS version of the site.
+router.beforeEach(() => {
+  if (window.location.protocol !== 'https:' && !window.location.host.includes('localhost')) {
+    window.location.href = `https://${window.location.host}`;
+    return false;
+  }
+});
+
 // Regardless of the route, we want to close the navigation drawer.
 router.afterEach(() => {
   const closeNavButton: HTMLButtonElement | null = document.querySelector("[id^='radix-vue-dialog-content-1'] button[class*='data-[state=open]'");
