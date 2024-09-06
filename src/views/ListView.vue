@@ -113,6 +113,13 @@ function addItem() {
   };
 }
 
+function resetWeights() {
+  chosenList.value.items.forEach((item, index) => {
+    item.weight = 1;
+    return item;
+  });
+}
+
 function pickRandomItem() {
   chosenItem.value = getRandomItem(chosenList.value);
 }
@@ -236,7 +243,7 @@ function getError(key: string) {
 
       <!-- Right / sidebar -->
       <div class="my-4 text-center md:my-0 md:text-left md:w-1/5">
-        <Heading2>Weights</Heading2>
+        <Heading2>Weights <Button confirm @click="resetWeights" variant="secondary">Reset weights</Button></Heading2>
         <p v-for="item in chosenList.items" :key="item.name">{{ item.name }}: {{ item.weight }}</p>
       </div>
     </div>
