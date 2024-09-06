@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, toRaw, watch } from 'vue';
+import { computed, ref, toRaw, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useListsStore } from '@/stores/lists';
 
@@ -14,6 +14,8 @@ import {
   Table, TableRow, TableHead, TableData
 } from '@/components/ui/typography';
 import { getRandomItem } from '@/lib/lists';
+
+const hasClipboardAPI = computed(() => navigator.clipboard);
 
 const listsStore = useListsStore();
 const route = useRoute();
@@ -121,13 +123,13 @@ function getError(key: string) {
 <template>
   <div>
     <Input v-if="editMode" v-model="newList.name" class="box-content p-2 mb-2 text-4xl font-bold text-center focus:text-4xl" />
-    <Heading-1 v-else class="pb-2 text-center">{{ chosenList.name }}</Heading-1>
+    <Heading1 v-else class="pb-2 text-center">{{ chosenList.name }}</Heading1>
 
     <div class="flex flex-col items-center justify-center my-4">
       <div>
         <Button variant="secondary" class="mr-2" @click="toggleEdit">{{ editMode ? 'Cancel' : 'Edit' }}</Button>
         <Button v-if="editMode" class="mr-2" @click="saveEdits">Save</Button>
-        <Button v-else :disabled="showCopySuccess" @click="copyToClipboard">Share</Button>
+        <Button v-else-if="!editMode && hasClipboardAPI" :disabled="showCopySuccess" @click="copyToClipboard">Share</Button>
       </div>
       <div :class="{ 'opacity-1': showCopySuccess, 'opacity-0': !showCopySuccess }" class="text-green-500 transition-opacity duration-300">
         <p>URL copied to clipboard!</p>
@@ -144,14 +146,14 @@ function getError(key: string) {
         />
       </div>
       <div class="my-4 text-center md:my-0 md:text-left md:w-1/5">
-        <Heading-2>Weights</Heading-2>
+        <Heading2>Weights</Heading2>
         <p v-for="item in chosenList.items" :key="item.name">{{ item.name }}: {{ item.weight }}</p>
       </div>
     </div>
 
     <section v-if="editMode" class="md:flex md:flex-row md:flex-wrap md:gap-4">
       <div class="flex-1">
-        <Heading-2>Add an item</Heading-2>
+        <Heading2>Add an item</Heading2>
         <p v-if="hasError('general')" class="error">{{ getError('general').message }}</p>
 
         <div class="my-2">
